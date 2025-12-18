@@ -9,6 +9,7 @@ import { SpatialHero } from "@/components/sections/SpatialHero";
 import { SpatialSkills } from "@/components/sections/SpatialSkills";
 import { SpatialProjects } from "@/components/sections/SpatialProjects";
 import { SpatialAbout } from "@/components/sections/SpatialAbout";
+import { SpatialTeam } from "@/components/sections/SpatialTeam";
 import { SpatialContact } from "@/components/sections/SpatialContact";
 import { motion, useTransform } from "framer-motion";
 
@@ -43,8 +44,13 @@ function WorldContent() {
           <SpatialAbout />
         </SpatialSection>
 
-        {/* Contact - Exit Node (Z: 7500) */}
-        <SpatialSection id="contact" z={7500}>
+        {/* Team - Our People (Z: 6500) */}
+        <SpatialSection id="team" z={6500}>
+          <SpatialTeam />
+        </SpatialSection>
+
+        {/* Contact - Exit Node (Z: 8000) */}
+        <SpatialSection id="contact" z={8000}>
           <SpatialContact />
         </SpatialSection>
       </WorldCanvas>

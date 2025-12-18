@@ -44,7 +44,7 @@ const VELOCITY_SPRING = { stiffness: 80, damping: 25, mass: 0.5 };
 
 // Camera bounds - stop exactly at Contact section
 const Z_MIN = 0;
-const Z_MAX = 7500;  // Match Contact section z position
+const Z_MAX = 8000;  // Match Contact section z position
 const PAN_BOUNDS = { x: [-600, 600], y: [-400, 400] };
 
 // Section positions in Z-space
@@ -53,7 +53,8 @@ const SECTION_ANCHORS: SectionAnchor[] = [
     { id: "skills", z: 1500, label: "Skills" },
     { id: "work", z: 3500, label: "Work" },
     { id: "about", z: 5500, label: "About" },
-    { id: "contact", z: 7500, label: "Contact" },
+    { id: "team", z: 7000, label: "Team" },
+    { id: "contact", z: 8000, label: "Contact" },
 ];
 
 export function WorldProvider({ children }: { children: React.ReactNode }) {

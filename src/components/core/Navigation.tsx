@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 
@@ -84,6 +85,7 @@ export const Navigation = () => {
         { id: "skills", label: "Skills" },
         { id: "work", label: "Work" },
         { id: "about", label: "About" },
+        { id: "team", label: "Team", href: "/team" },
     ];
 
     return (
@@ -122,7 +124,7 @@ export const Navigation = () => {
 
                         <div className="flex flex-col">
                             <span className="text-xl font-bold tracking-tight uppercase text-foreground">
-                                SARVAAX<span className="text-neon">®</span>
+                                SARVAAX
                             </span>
                             <span className="hidden md:block text-neutral-500 text-xs font-medium tracking-wide">
                                 The X Factor in Technology
@@ -133,25 +135,37 @@ export const Navigation = () => {
                     {/* Center: Navigation Links (Desktop) */}
                     <div className="hidden md:flex items-center gap-1 bg-neutral-900/50 backdrop-blur-md rounded-full px-2 py-1.5 border border-neutral-800/50">
                         {navLinks.map((link) => (
-                            <motion.button
-                                key={link.id}
-                                onClick={() => scrollToSection(link.id)}
-                                className={`relative px-5 py-2 text-sm font-medium uppercase tracking-wider rounded-full transition-colors duration-300 ${activeSection === link.id
-                                    ? "text-black"
-                                    : "text-neutral-400 hover:text-white"
-                                    }`}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                {activeSection === link.id && (
-                                    <motion.div
-                                        layoutId="activeSection"
-                                        className="absolute inset-0 bg-neon rounded-full"
-                                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                                    />
-                                )}
-                                <span className="relative z-10">{link.label}</span>
-                            </motion.button>
+                            link.href ? (
+                                <Link key={link.id} href={link.href}>
+                                    <motion.span
+                                        className="relative px-5 py-2 text-sm font-medium uppercase tracking-wider rounded-full transition-colors duration-300 text-neutral-400 hover:text-white cursor-pointer"
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
+                                        {link.label}
+                                    </motion.span>
+                                </Link>
+                            ) : (
+                                <motion.button
+                                    key={link.id}
+                                    onClick={() => scrollToSection(link.id)}
+                                    className={`relative px-5 py-2 text-sm font-medium uppercase tracking-wider rounded-full transition-colors duration-300 ${activeSection === link.id
+                                        ? "text-black"
+                                        : "text-neutral-400 hover:text-white"
+                                        }`}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    {activeSection === link.id && (
+                                        <motion.div
+                                            layoutId="activeSection"
+                                            className="absolute inset-0 bg-neon rounded-full"
+                                            transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                                        />
+                                    )}
+                                    <span className="relative z-10">{link.label}</span>
+                                </motion.button>
+                            )
                         ))}
                     </div>
 
@@ -191,19 +205,35 @@ export const Navigation = () => {
                         className="fixed inset-0 z-[99] pt-20 bg-black/95 backdrop-blur-xl md:hidden"
                     >
                         <div className="flex flex-col items-center justify-center h-full gap-8">
-                            {["hero", ...navLinks.map(l => l.id), "contact"].map((id, i) => (
-                                <motion.button
-                                    key={id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.1 }}
-                                    onClick={() => scrollToSection(id)}
-                                    className={`text-3xl font-bold uppercase tracking-wide ${activeSection === id ? "text-neon" : "text-white hover:text-neon"
-                                        } transition-colors`}
-                                >
-                                    {id === "hero" ? "Home" : id.charAt(0).toUpperCase() + id.slice(1)}
-                                </motion.button>
-                            ))}
+                            {["hero", ...navLinks.map(l => ({ id: l.id, href: l.href })), { id: "contact", href: undefined }].map((item, i) => {
+                                const link = typeof item === 'string' ? { id: item, href: undefined } : item;
+                                if (link.href) {
+                                    return (
+                                        <Link key={link.id} href={link.href} onClick={() => setIsMobileMenuOpen(false)}>
+                                            <motion.span
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: i * 0.1 }}
+                                                className="text-3xl font-bold uppercase tracking-wide text-white hover:text-neon transition-colors cursor-pointer"
+                                            >
+                                                {link.id.charAt(0).toUpperCase() + link.id.slice(1)}
+                                            </motion.span>
+                                        </Link>
+                                    );
+                                }
+                                return (
+                                    <motion.button
+                                        key={link.id}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: i * 0.1 }}
+                                        onClick={() => scrollToSection(link.id)}
+                                        className={`text-3xl font-bold uppercase tracking-wide ${activeSection === link.id ? "text-neon" : "text-white hover:text-neon"} transition-colors`}
+                                    >
+                                        {link.id === "hero" ? "Home" : link.id.charAt(0).toUpperCase() + link.id.slice(1)}
+                                    </motion.button>
+                                );
+                            })}
                         </div>
                     </motion.div>
                 )}
