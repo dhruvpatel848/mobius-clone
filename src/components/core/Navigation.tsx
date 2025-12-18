@@ -89,15 +89,16 @@ export const Navigation = () => {
                     >
                         {/* Animated Vortex Logo */}
                         <motion.div
-                            className="relative w-12 h-12 overflow-hidden"
+                            className="relative w-14 h-14 overflow-hidden"
                             animate={{ rotate: 360 }}
                             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                         >
                             <Image
-                                src="/logo-vortex.png"
+                                src="/logo-hex.png"
                                 alt="Sarvaax Logo"
                                 fill
                                 className="object-contain"
+                                priority
                             />
                         </motion.div>
 
@@ -118,8 +119,8 @@ export const Navigation = () => {
                                 key={link.id}
                                 onClick={() => scrollToSection(link.id)}
                                 className={`relative px-5 py-2 text-sm font-medium uppercase tracking-wider rounded-full transition-colors duration-300 ${activeSection === link.id
-                                        ? "text-black"
-                                        : "text-neutral-400 hover:text-white"
+                                    ? "text-black"
+                                    : "text-neutral-400 hover:text-white"
                                     }`}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
