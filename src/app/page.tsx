@@ -28,23 +28,23 @@ function WorldContent() {
           <SpatialHero />
         </SpatialSection>
 
-        {/* Skills - System View (Z: 2000) */}
-        <SpatialSection id="skills" z={2000}>
+        {/* Skills - System View (Z: 1500) */}
+        <SpatialSection id="skills" z={1500}>
           <SpatialSkills />
         </SpatialSection>
 
-        {/* Work - Landmarks (Z: 5000) */}
-        <SpatialSection id="work" z={5000}>
+        {/* Work - Landmarks (Z: 3500) */}
+        <SpatialSection id="work" z={3500}>
           <SpatialProjects />
         </SpatialSection>
 
-        {/* About - Perspective Shift (Z: 7500) */}
-        <SpatialSection id="about" z={7500}>
+        {/* About - Perspective Shift (Z: 5500) */}
+        <SpatialSection id="about" z={5500}>
           <SpatialAbout />
         </SpatialSection>
 
-        {/* Contact - Exit Node (Z: 9500) */}
-        <SpatialSection id="contact" z={9500}>
+        {/* Contact - Exit Node (Z: 7500) */}
+        <SpatialSection id="contact" z={7500}>
           <SpatialContact />
         </SpatialSection>
       </WorldCanvas>
@@ -54,7 +54,7 @@ function WorldContent() {
         {sections.map((section) => {
           // Highlight active section based on camera Z
           const isActive = useTransform(camera.z, z => {
-            const tolerance = 1000;
+            const tolerance = 750;
             return Math.abs(z - section.z) < tolerance;
           });
 

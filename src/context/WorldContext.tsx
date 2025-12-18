@@ -38,22 +38,22 @@ interface WorldContextValue {
 
 const WorldContext = createContext<WorldContextValue | null>(null);
 
-// Spring physics configuration
-const CAMERA_SPRING = { stiffness: 100, damping: 30, mass: 1 };
-const VELOCITY_SPRING = { stiffness: 50, damping: 20, mass: 0.5 };
+// FASTER Spring physics - transitions complete in ~1-1.5 seconds
+const CAMERA_SPRING = { stiffness: 200, damping: 35, mass: 0.8 };
+const VELOCITY_SPRING = { stiffness: 80, damping: 25, mass: 0.5 };
 
-// Camera bounds
+// Camera bounds - compressed for faster navigation
 const Z_MIN = 0;
-const Z_MAX = 10000;
+const Z_MAX = 8000;
 const PAN_BOUNDS = { x: [-600, 600], y: [-400, 400] };
 
 // Section positions in Z-space
 const SECTION_ANCHORS: SectionAnchor[] = [
     { id: "hero", z: 0, label: "Home" },
-    { id: "skills", z: 2000, label: "Skills" },
-    { id: "work", z: 5000, label: "Work" },
-    { id: "about", z: 7500, label: "About" },
-    { id: "contact", z: 9500, label: "Contact" },
+    { id: "skills", z: 1500, label: "Skills" },
+    { id: "work", z: 3500, label: "Work" },
+    { id: "about", z: 5500, label: "About" },
+    { id: "contact", z: 7500, label: "Contact" },
 ];
 
 export function WorldProvider({ children }: { children: React.ReactNode }) {
@@ -75,6 +75,10 @@ export function WorldProvider({ children }: { children: React.ReactNode }) {
     // Reduced motion preference
     const [reducedMotion, setReducedMotion] = useState(false);
 
+    // Touch tracking for mobile
+    const touchStartY = useRef(0);
+    const lastTouchY = useRef(0);
+
     useEffect(() => {
         const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
         setReducedMotion(mq.matches);
@@ -83,12 +87,11 @@ export function WorldProvider({ children }: { children: React.ReactNode }) {
         return () => mq.removeEventListener("change", handler);
     }, []);
 
-    // Scroll handler - maps scroll to Z movement
+    // Desktop scroll handler
     useEffect(() => {
         if (reducedMotion) return;
 
         let lastScrollTime = Date.now();
-        let scrollVelocity = 0;
 
         const handleWheel = (e: WheelEvent) => {
             e.preventDefault();
@@ -98,17 +101,58 @@ export function WorldProvider({ children }: { children: React.ReactNode }) {
             lastScrollTime = now;
 
             // Calculate scroll velocity
-            scrollVelocity = Math.abs(e.deltaY) / dt;
+            const scrollVelocity = Math.abs(e.deltaY) / dt;
             velocity.set(scrollVelocity);
 
-            // Move camera Z based on scroll
-            const sensitivity = 2;
+            // Move camera Z based on scroll - increased sensitivity
+            const sensitivity = 3;
             const newZ = Math.min(Z_MAX, Math.max(Z_MIN, cameraZ.get() + e.deltaY * sensitivity));
             cameraZ.set(newZ);
         };
 
         window.addEventListener("wheel", handleWheel, { passive: false });
         return () => window.removeEventListener("wheel", handleWheel);
+    }, [cameraZ, velocity, reducedMotion]);
+
+    // Mobile touch scroll handler
+    useEffect(() => {
+        if (reducedMotion) return;
+
+        const handleTouchStart = (e: TouchEvent) => {
+            touchStartY.current = e.touches[0].clientY;
+            lastTouchY.current = e.touches[0].clientY;
+        };
+
+        const handleTouchMove = (e: TouchEvent) => {
+            // Prevent default to stop page scrolling
+            e.preventDefault();
+
+            const currentY = e.touches[0].clientY;
+            const deltaY = lastTouchY.current - currentY;
+            lastTouchY.current = currentY;
+
+            // Move camera Z based on touch drag - higher sensitivity for mobile
+            const sensitivity = 5;
+            const newZ = Math.min(Z_MAX, Math.max(Z_MIN, cameraZ.get() + deltaY * sensitivity));
+            cameraZ.set(newZ);
+
+            velocity.set(Math.abs(deltaY));
+        };
+
+        const handleTouchEnd = () => {
+            velocity.set(0);
+        };
+
+        // Add touch listeners with passive: false to allow preventDefault
+        window.addEventListener("touchstart", handleTouchStart, { passive: true });
+        window.addEventListener("touchmove", handleTouchMove, { passive: false });
+        window.addEventListener("touchend", handleTouchEnd, { passive: true });
+
+        return () => {
+            window.removeEventListener("touchstart", handleTouchStart);
+            window.removeEventListener("touchmove", handleTouchMove);
+            window.removeEventListener("touchend", handleTouchEnd);
+        };
     }, [cameraZ, velocity, reducedMotion]);
 
     // Navigate to section
