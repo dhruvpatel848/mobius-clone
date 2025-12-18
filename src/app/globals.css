@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #000000;
+  /* Deep Dark Background */
+  --color-foreground: #ededed;
+  /* Off-White Text */
+  --color-neon: #daff02;
+  /* Neon Lime Accent */
+
+  /* Dark borders */
+  --color-border-color: #262626;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased font-sans selection:bg-neon selection:text-foreground;
+  }
+
+  a {
+    @apply text-inherit no-underline hover:text-neon transition-colors duration-300;
+  }
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+/* Custom Utilities for this theme */
+@utility border-grid {
+  @apply border-border-color;
+}
