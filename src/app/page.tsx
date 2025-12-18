@@ -81,17 +81,7 @@ function WorldContent() {
         })}
       </div>
 
-      {/* Depth Indicator */}
-      <div className="fixed left-6 bottom-6 z-[100] font-mono text-xs text-neutral-600">
-        <motion.span>
-          Depth: <motion.span className="text-neon">{useTransform(smoothCamera.z, v => Math.round(v))}</motion.span>
-        </motion.span>
-      </div>
 
-      {/* Scroll Hint */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] font-mono text-xs text-neutral-600">
-        <span>↕ Scroll to navigate</span>
-      </div>
     </>
   );
 }

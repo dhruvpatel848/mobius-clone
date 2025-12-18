@@ -42,9 +42,9 @@ const WorldContext = createContext<WorldContextValue | null>(null);
 const CAMERA_SPRING = { stiffness: 200, damping: 35, mass: 0.8 };
 const VELOCITY_SPRING = { stiffness: 80, damping: 25, mass: 0.5 };
 
-// Camera bounds - compressed for faster navigation
+// Camera bounds - stop exactly at Contact section
 const Z_MIN = 0;
-const Z_MAX = 8000;
+const Z_MAX = 7500;  // Match Contact section z position
 const PAN_BOUNDS = { x: [-600, 600], y: [-400, 400] };
 
 // Section positions in Z-space

@@ -405,7 +405,7 @@ export function SpatialProjects() {
                 ))}
             </motion.div>
 
-            <motion.p animate={{ opacity: isDragging ? 0 : 0.6 }} className="text-neutral-500 text-sm font-mono">← Drag to rotate orbit →</motion.p>
+
         </div>
     );
 }

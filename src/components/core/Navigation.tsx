@@ -28,6 +28,20 @@ export const Navigation = () => {
             }, 1500);
         };
 
+        // Mobile touch scroll detection
+        let lastTouchY = 0;
+        const handleTouchStart = (e: TouchEvent) => {
+            lastTouchY = e.touches[0].clientY;
+        };
+        const handleTouchMove = (e: TouchEvent) => {
+            const diff = Math.abs(e.touches[0].clientY - lastTouchY);
+            if (diff > 10) {
+                setIsVisible(false);
+                if (hideTimeout.current) clearTimeout(hideTimeout.current);
+                hideTimeout.current = setTimeout(() => setIsVisible(true), 1500);
+            }
+        };
+
         // Show nav on mouse move to top area
         const handleMouseMove = (e: MouseEvent) => {
             if (e.clientY < 100) {
@@ -37,10 +51,14 @@ export const Navigation = () => {
 
         window.addEventListener("wheel", handleWheel, { passive: true });
         window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("touchstart", handleTouchStart, { passive: true });
+        window.addEventListener("touchmove", handleTouchMove, { passive: true });
 
         return () => {
             window.removeEventListener("wheel", handleWheel);
             window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("touchstart", handleTouchStart);
+            window.removeEventListener("touchmove", handleTouchMove);
             if (hideTimeout.current) {
                 clearTimeout(hideTimeout.current);
             }
@@ -138,16 +156,16 @@ export const Navigation = () => {
                     </div>
 
                     {/* Right: Contact Button + Mobile Menu */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 md:gap-4">
                         <motion.button
                             onClick={() => scrollToSection('contact')}
-                            className="group relative overflow-hidden px-6 py-2.5 bg-neon text-black text-sm font-bold uppercase tracking-wider rounded-full"
+                            className="group relative overflow-hidden px-3 py-1.5 md:px-6 md:py-2.5 bg-neon text-black text-xs md:text-sm font-bold uppercase tracking-wider rounded-full"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <span className="relative z-10 flex items-center gap-2">
+                            <span className="relative z-10 flex items-center gap-1 md:gap-2">
                                 Contact
-                                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                <ArrowUpRight size={12} className="md:w-[14px] md:h-[14px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                             </span>
                         </motion.button>
 

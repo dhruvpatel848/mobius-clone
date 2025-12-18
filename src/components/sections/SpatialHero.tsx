@@ -89,12 +89,12 @@ export function SpatialHero() {
                 </motion.p>
             </motion.div>
 
-            {/* Scroll indicator */}
+            {/* Scroll hint - only on Hero/landing */}
             <motion.div
                 className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-20"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2, duration: 0.6 }}
+                transition={{ delay: 1.5, duration: 0.6 }}
             >
                 <motion.div
                     animate={{ y: [0, 8, 0] }}
@@ -102,11 +102,12 @@ export function SpatialHero() {
                     className="flex flex-col items-center gap-2"
                 >
                     <span className="text-[10px] md:text-xs font-mono text-neutral-500 uppercase tracking-widest">
-                        {mounted && isMobile ? 'Swipe to Explore' : 'Scroll to Explore'}
+                        Scroll to navigate
                     </span>
                     <div className="w-px h-8 md:h-12 bg-gradient-to-b from-neon to-transparent" />
                 </motion.div>
             </motion.div>
+
         </div>
     );
 }
