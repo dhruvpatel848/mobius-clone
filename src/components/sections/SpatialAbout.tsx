@@ -37,9 +37,9 @@ export function SpatialAbout() {
                     className="grid grid-cols-3 gap-8 max-w-2xl mx-auto"
                 >
                     {[
-                        { value: "50+", label: "Projects Delivered" },
-                        { value: "99%", label: "Client Retention" },
-                        { value: "5yr", label: "Avg. Partnership" },
+                        { value: "5+", label: "Projects Delivered" },
+                        { value: "100%", label: "Client Retention" },
+                        { value: "1yr", label: "Avg. Partnership" },
                     ].map((stat, i) => (
                         <div key={i} className="text-center">
                             <div className="text-4xl md:text-5xl font-bold text-neon mb-2">{stat.value}</div>
